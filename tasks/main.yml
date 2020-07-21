@@ -1,2 +1,20 @@
 ---
-# tasks file for ansible-role-linux-vault
+- name: Include tasks for specific OS.
+  include: '{{ ansible_os_family }}.yml'
+
+- name: Include firewall tasks.
+  include: 'firewall.yml'
+
+- name: Installation the Vault.
+  include: 'install.yml'
+
+- name: Include certificate tasks.
+  include: 'certificates.yml'
+
+- name: Configuration the Vault.
+  include: 'configureation.yml'
+
+- name: Reload the Vault service.
+  shell: echo ''
+  notify: 'Ensure vault service is enabled'
+  when: vault_upgrade is changed or vault_config_update is changed or vault_systemd_update is changed

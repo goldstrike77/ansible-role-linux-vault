@@ -1,0 +1,6 @@
+---
+vault_dependent_packages:
+  - 'python-pip'
+  - 'openssl'
+  - 'libselinux-utils'
+  - 'policycoreutils-python'

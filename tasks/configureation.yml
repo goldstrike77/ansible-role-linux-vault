@@ -1,0 +1,18 @@
+---
+- name: Vault configuration file transfer.
+  template:
+    src: 'vault.hcl.j2'
+    dest: '/etc/vault/vault.hcl'
+    owner: '{{ vault_arg.user }}'
+    group: '{{ vault_arg.user }}'
+    mode: '0640'
+  register: vault_config_update
+
+- name: Vault systemd service file transfer.
+  template:
+    src: 'vault.service.j2'
+    dest: '/lib/systemd/system/vault.service'
+    owner: 'root'
+    group: 'root'
+    mode: '0644'
+  register: vault_systemd_update

@@ -1,0 +1,45 @@
+ui = true
+disable_mlock = true
+cluster_name = "{{ vault_cluster | default('default') }}"
+log_level = "{{ vault_arg.log_level | default('Info') }}"
+log_format = "{{ vault_arg.log_format | default('standard') }}"
+disable_clustering = {% if vault_servers | length == 1 %}{% endif %}
+api_addr = "https://{{ ansible_default_ipv4.address }}:{{ vault_port_arg.api | default('8200') }}"
+cluster_addr = "https://{{ ansible_default_ipv4.address }}:{{ vault_port_arg.cluster | default('8201') }}"
+
+listener "tcp" {
+  address = "{{ ansible_default_ipv4.address }}:{{ vault_port_arg.api | default('8200') }}"
+  cluster_address = "{{ ansible_default_ipv4.address }}:{{ vault_port_arg.cluster | default('8201') }}"
+  max_request_duration = "{{ vault_arg.max_request_duration | default('60s') }}"
+  http_read_header_timeout = "{{ vault_arg.http_read_header_timeout | default('30s') }}"
+  http_idle_timeout = "0"
+  http_read_timeout = "0"
+  http_write_timeout = "0"
+  tls_disable = "false"
+  tls_cert_file = "{{ vault_cert_path }}/certificate.pem"
+  tls_key_file  = "{{ vault_cert_path }}/server.key"
+  tls_min_version = "tls12"
+  tls_require_and_verify_client_cert = "false"
+  tls_disable_client_certs = "true"
+}
+
+listener "tcp" {
+  telemetry {
+    unauthenticated_metrics_access = true
+  }
+}
+
+storage "vault_storage_arg.stanza" {
+  path    = "{{ vault_path }}/vault"
+  node_id = "{{ inventory_hostname | upper }}"
+{% if vault_servers | length > 1 and vault_storage_arg.stanza == 'raft' %}
+{% for hosts in vault_servers %}
+  retry_join {
+    leader_api_addr = "https://{{ hosts }}:{{ vault_port_arg.api | default('8200') }}"
+    leader_ca_cer_file = "{{ vault_cert_path }}/ca-cert.pem"
+    leader_client_cert_file = "{{ vault_cert_path }}/client.crt"
+    leader_client_key_file = "{{ vault_cert_path }}/client.key"
+  }
+{% endfor %}
+{% endif %}
+}

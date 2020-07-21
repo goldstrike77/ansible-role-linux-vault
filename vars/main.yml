@@ -1,2 +1,29 @@
 ---
-# vars file for ansible-role-linux-vault
+vault_soft_url: 'http://releases.hashicorp.com'
+
+vault_pypi_url: 'pypi.tuna.tsinghua.edu.cn'
+
+vault_cert_path: '/etc/vault/ssl'
+
+vault_architecture:
+  amd64: 'amd64'
+  x86_64: 'amd64'
+  armv6l: 'arm'
+  armv7l: 'arm'
+  aarch64: 'arm64'
+  32-bit: '386'
+  64-bit: 'amd64'
+
+vault_python_dependent_packages:
+  - 'pip'
+  - 'cryptography'
+
+vault_servers: "\
+  {% set _vault_servers = [] %}\
+  {% for host in groups[group_names[-1]] %}\
+    {% set _vault_cluster = vault_cluster | default('', true) %}\
+    {% if ( _vault_cluster == vault_cluster ) %}\
+      {% if _vault_servers.append(hostvars[host]['ansible_host']) %}{% endif %}\
+    {% endif %}\
+  {% endfor %}\
+  {{ _vault_servers }}"
