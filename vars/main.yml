@@ -21,9 +21,6 @@ vault_python_dependent_packages:
 vault_servers: "\
   {% set _vault_servers = [] %}\
   {% for host in groups[group_names[-1]] %}\
-    {% set _vault_cluster = vault_cluster | default('', true) %}\
-    {% if ( _vault_cluster == vault_cluster ) %}\
-      {% if _vault_servers.append(hostvars[host]['ansible_host']) %}{% endif %}\
-    {% endif %}\
+    {% if _vault_servers.append(hostvars[host]['ansible_host']) %}{% endif %}\
   {% endfor %}\
   {{ _vault_servers }}"

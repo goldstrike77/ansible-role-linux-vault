@@ -10,6 +10,7 @@
 
 - name: Include certificate tasks.
   include: 'certificates.yml'
+  when: vault_tls | bool
 
 - name: Configuration the Vault.
   include: 'configureation.yml'
@@ -18,3 +19,13 @@
   shell: echo ''
   notify: 'Ensure vault service is enabled'
   when: vault_upgrade is changed or vault_config_update is changed or vault_systemd_update is changed
+
+- name: Force the handler to run immediately.
+  meta: flush_handlers
+
+- name: Include initialize tasks.
+  include: 'init.yml'
+
+- name: Include unseal tasks.
+  include: 'unseal.yml'
+  when: vault_init_key is defined

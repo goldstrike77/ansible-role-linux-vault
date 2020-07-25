@@ -2,7 +2,7 @@
 - name: Include OS-specific variables.
   include_vars: '{{ ansible_os_family }}.yml'
 
-- name: Install the Alerta dependent packages.
+- name: Install the Vault dependent packages.
   yum:
     name: '{{ vault_dependent_packages }}'
     state: 'present'

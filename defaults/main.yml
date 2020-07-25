@@ -1,9 +1,9 @@
 ---
 # General parameters #
 vault_is_install: false # A boolean value, whether install the HashiCorp Vault.
-vault_version: '1.4.3' # Specify the Vault version.
+vault_version: '1.5.0' # Specify the Vault version.
 vault_path: '/data' # Specify the Consul data folder.
-vault_cluster: '' # Specifies the identifier for the Vault cluster.
+vault_tls: true # A boolean value, whether Encrypting client and cluster communications.
 
 # Listen port #
 vault_port_arg: # Defines communication port.
@@ -12,14 +12,14 @@ vault_port_arg: # Defines communication port.
 
 # Storage parameters #
 vault_storage_arg: 
-  stanza: 'raft' # Specify the location for the durable storage of Vault's information.
+  stanza: 'file' # Specify the location for the durable storage of Vault's information.
 
 # System Variables #
 vault_arg:
-  log_level: "Info" # Specifies the log level to use.
-  log_format: "standard" # Specifies the log format to use.
-  max_request_duration: "60s" # Specifies the maximum request duration allowed before Vault cancels the request.
-  http_read_header_timeout: "30s" # Specifies the amount of time allowed to read request headers.
+  log_level: 'Info' # Specifies the log level to use.
+  log_format: 'standard' # Specifies the log format to use.
+  max_request_duration: '60s' # Specifies the maximum request duration allowed before Vault cancels the request.
+  http_read_header_timeout: '30s' # Specifies the amount of time allowed to read request headers.
   user: 'vault' # Sets the Unix username that the processes are executed as.
   uid: '2012' # Sets the Unix userID that the processes are executed as.
 
