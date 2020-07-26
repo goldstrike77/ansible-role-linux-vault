@@ -1,0 +1,7 @@
+[vault]
+type = {{ vault_backupset_arg.cloud_drive }}
+{% if vault_backupset_arg.cloud_drive == 'azureblob' %}
+account = {{ vault_backupset_arg.cloud_config.account }}
+key = {{ vault_backupset_arg.cloud_config.key }}
+endpoint = {{ vault_backupset_arg.cloud_config.endpoint }}
+{% endif %}

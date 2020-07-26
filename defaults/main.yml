@@ -12,7 +12,19 @@ vault_port_arg: # Defines communication port.
 
 # Storage parameters #
 vault_storage_arg: 
-  stanza: 'file' # Specify the location for the durable storage of Vault's information.
+  stanza: 'raft' # Specify the location for the durable storage of Vault's information.
+
+# Backup parameters #
+vault_backupset_arg:
+  keep: '30' # The number of backups days to keep.
+  cloud_rsync: false # Whether rsync for cloud storage.
+  cloud_drive: 'azureblob' # Specify the cloud storage providers.
+  cloud_bwlimit: '10M' # Controls the bandwidth limit.
+  cloud_event: 'sync' # Define transfer events.
+  cloud_config: # Specify the cloud storage configuration.
+    account: 'blobuser' # Storage Account Name.
+    key: 'base64encodedkey==' # Storage Account Key.
+    endpoint: 'blob.core.chinacloudapi.cn' # Endpoint for the service.
 
 # System Variables #
 vault_arg:

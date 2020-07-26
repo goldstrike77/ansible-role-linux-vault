@@ -13,46 +13,41 @@
   retries: 5
   delay: 2
 
-- name: Initialize a new Vault member.
-  uri:
-    url: '{% if vault_tls | bool %}https{% else %}http{% endif %}://{{ ansible_default_ipv4.address }}:{{ vault_port_arg.api }}/v1/sys/init'
-    method: 'PUT'
-    timeout: '60'
-    body: '{"secret_shares": {{ vault_servers | length * 5 }},"secret_threshold": 2}'
-    body_format: 'json'
-    status_code: '200'
-    headers:
-      X-Requested-By: '{{ ansible_default_ipv4.address }}'
-      cache-control: 'no-cache'
-    validate_certs: 'no'
-  environment:
-    no_proxy: '{{ ansible_default_ipv4.address }}'
+- name: Initial operation.
+  block:
+    - name: Initialize a new Vault Leader.
+      uri:
+        url: '{% if vault_tls | bool %}https{% else %}http{% endif %}://{{ ansible_default_ipv4.address }}:{{ vault_port_arg.api }}/v1/sys/init'
+        method: 'PUT'
+        timeout: '60'
+        body: '{"secret_shares": {{ vault_servers | length * 3 }},"secret_threshold": 2}'
+        body_format: 'json'
+        status_code: '200'
+        headers:
+          X-Requested-By: '{{ ansible_default_ipv4.address }}'
+          cache-control: 'no-cache'
+        validate_certs: 'no'
+      environment:
+        no_proxy: '{{ ansible_default_ipv4.address }}'
+      register: vault_init_status
+      until: vault_init_status.status == 200
+      retries: 5
+      delay: 2
+      no_log: true
+    - name: Vault root token password outputs.
+      copy:
+        content: "{{ vault_init_status | json_query('json.root_token') }}"
+        dest: '/tmp/vault_root.token'
+        mode: '0600'
+        owner: 'root'
+        group: 'root'
+      no_log: true
+    - name: Read Initialization Status.
+      set_fact:
+        vault_init_key: "{{ vault_init_status | json_query('json.keys[*]') }}"
+        vault_root_token: "{{ vault_init_status | json_query('json.root_token') }}"
+      delegate_to: '{{ item }}'
+      delegate_facts: true
+      loop: '{{ groups[group_names[-1]] }}'
+      no_log: true
   when: vault_check_status.status == 501
-  register: vault_init_status
-  until: vault_init_status.status == 200
-  retries: 5
-  delay: 2
-  no_log: true
-
-- name: Vault root token password outputs.
-  copy:
-    content: "{{ vault_init_status | json_query('json.root_token') }}"
-    dest: '/tmp/vault_root.token'
-    mode: '0600'
-    owner: 'root'
-    group: 'root'
-  when:
-    - vault_servers[0] in ansible_default_ipv4.address
-    - vault_check_status.status == 501
-  no_log: true
-
-- name: Read Initialization Status.
-  set_fact:
-    vault_init_key: "{{ vault_init_status | json_query('json.keys[*]') }}"
-  delegate_to: '{{ item }}'
-  delegate_facts: true
-  loop: '{{ groups[group_names[-1]] }}'
-  when:
-    - vault_servers[0] in ansible_default_ipv4.address
-    - vault_check_status.status == 501
-  no_log: true

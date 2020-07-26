@@ -25,7 +25,18 @@
 
 - name: Include initialize tasks.
   include: 'init.yml'
+  when: vault_servers[0] in ansible_default_ipv4.address
 
 - name: Include unseal tasks.
   include: 'unseal.yml'
   when: vault_init_key is defined
+
+- name: Include backup tasks.
+  include: 'backup.yml'
+  when: vault_root_token is defined
+
+- name: Registered with HashiCorp Consul.
+  include: 'register.yml'
+  when: 
+    - exporter_is_install | bool
+    - consul_public_register | bool
