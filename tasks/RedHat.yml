@@ -2,6 +2,33 @@
 - name: Include OS-specific variables.
   include_vars: '{{ ansible_os_family }}.yml'
 
+- name: Add EPEL YUM repositories.
+  yum_repository:
+    name: '{{ vault_epel_repo_name }}'
+    description: '{{ vault_epel_repo_name }} YUM repo'
+    file: '{{ vault_epel_repo_name }}'
+    baseurl: '{{ vault_epel_repo_url }}'
+    gpgcheck: 'no'
+    timeout: '60'
+  when:
+    - vault_backupset_arg.cloud_rsync | bool
+    - vault_backupset_arg.cloud_drive is defined
+
+- name: Install the Rclone command line program packages.
+  yum:
+    name: 'rclone'
+    state: 'present'
+    validate_certs: 'no'
+    disable_gpg_check: 'yes'
+    update_cache: 'yes'
+  register: yum_status
+  until: yum_status is succeeded
+  retries: 5
+  delay: 2
+  when:
+    - vault_backupset_arg.cloud_rsync | bool
+    - vault_backupset_arg.cloud_drive is defined
+
 - name: Install the Vault dependent packages.
   yum:
     name: '{{ vault_dependent_packages }}'
