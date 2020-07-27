@@ -18,7 +18,7 @@
 - name: Reload the Vault service.
   shell: echo ''
   notify: 'Ensure vault service is enabled'
-  when: vault_upgrade is changed or vault_config_update is changed or vault_systemd_update is changed
+  when: vault_upgrade is changed or vault_config_update is changed
 
 - name: Force the handler to run immediately.
   meta: flush_handlers
@@ -41,14 +41,14 @@
   include: 'backup.yml'
   when: vault_root_token is defined
 
-- name: Vault unseal script file transfer.
-  template:
-    src: 'vault_unseal.sh.j2'
-    dest: '/usr/local/bin/vault_unseal.sh'
-    owner: '{{ vault_arg.user }}'
-    group: '{{ vault_arg.user }}'
-    mode: '0640'
+- name: Include auto-unseal task.
+  include: 'auto-unseal.yml'
   when: vault_init_key is defined
+
+- name: Reload the Vault service.
+  shell: echo ''
+  notify: 'Ensure vault service is enabled'
+  when: vault_systemd_update is changed
 
 - name: Registered with HashiCorp Consul.
   include: 'register.yml'

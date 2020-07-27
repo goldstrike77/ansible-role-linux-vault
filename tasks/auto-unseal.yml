@@ -1,0 +1,17 @@
+---
+- name: Vault unseal script file transfer.
+  template:
+    src: 'vault_unseal.sh.j2'
+    dest: '/usr/local/bin/vault_unseal.sh'
+    owner: '{{ vault_arg.user }}'
+    group: '{{ vault_arg.user }}'
+    mode: '0640'
+
+- name: Vault auto-unseal script add.
+  lineinfile:
+    state: 'present'
+    dest: '/lib/systemd/system/vault.service'
+    insertafter: '\[Service\]'
+    regexp: 'ExecStartPost'
+    line: 'ExecStartPost=/bin/sh /usr/local/bin/vault_unseal.sh'
+  register: vault_systemd_update

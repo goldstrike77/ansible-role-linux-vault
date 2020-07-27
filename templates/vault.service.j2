@@ -21,7 +21,6 @@ CapabilityBoundingSet=CAP_SYSLOG CAP_IPC_LOCK
 NoNewPrivileges=yes
 ExecStart=/usr/local/bin/vault server -config=/etc/vault/vault.hcl
 ExecReload=/bin/kill --signal HUP $MAINPID
-ExecStartPost=/bin/sh /usr/local/bin/vault_unseal.sh
 KillMode=process
 KillSignal=SIGINT
 Restart=on-failure
