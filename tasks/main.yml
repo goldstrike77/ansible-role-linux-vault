@@ -31,9 +31,24 @@
   include: 'unseal.yml'
   when: vault_init_key is defined
 
+- name: Include audit tasks.
+  include: 'audit.yml'
+  when:
+    - vault_root_token is defined
+    - vault_servers[0] in ansible_default_ipv4.address
+
 - name: Include backup tasks.
   include: 'backup.yml'
   when: vault_root_token is defined
+
+- name: Vault unseal script file transfer.
+  template:
+    src: 'vault_unseal.sh.j2'
+    dest: '/usr/local/bin/vault_unseal.sh'
+    owner: '{{ vault_arg.user }}'
+    group: '{{ vault_arg.user }}'
+    mode: '0640'
+  when: vault_init_key is defined
 
 - name: Registered with HashiCorp Consul.
   include: 'register.yml'

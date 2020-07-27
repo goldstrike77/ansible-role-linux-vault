@@ -1,0 +1,21 @@
+---
+- name: Enable audit devices.
+  uri:
+    url: '{% if vault_tls | bool %}https{% else %}http{% endif %}://{{ ansible_default_ipv4.address }}:{{ vault_port_arg.api }}/v1/sys/audit/syslog'
+    method: 'PUT'
+    timeout: '10'
+    body: '{"type":"syslog"}'
+    body_format: 'json'
+    status_code: '204'
+    headers:
+      X-Vault-Token: '{{ vault_root_token }}' 
+      X-Requested-By: '{{ ansible_default_ipv4.address }}'
+      cache-control: 'no-cache'
+    validate_certs: 'no'
+  environment:
+    no_proxy: '{{ ansible_default_ipv4.address }}'
+  register: vault_audit_status
+  until: vault_audit_status.status == 204
+  retries: 5
+  delay: 2
+  no_log: true

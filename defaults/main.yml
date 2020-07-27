@@ -28,7 +28,7 @@ vault_backupset_arg:
 
 # System Variables #
 vault_arg:
-  log_level: 'Info' # Specifies the log level to use.
+  log_level: 'Warn' # Specifies the log level to use.
   log_format: 'standard' # Specifies the log format to use.
   max_request_duration: '60s' # Specifies the maximum request duration allowed before Vault cancels the request.
   http_read_header_timeout: '30s' # Specifies the amount of time allowed to read request headers.

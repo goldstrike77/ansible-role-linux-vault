@@ -20,7 +20,7 @@
         url: '{% if vault_tls | bool %}https{% else %}http{% endif %}://{{ ansible_default_ipv4.address }}:{{ vault_port_arg.api }}/v1/sys/init'
         method: 'PUT'
         timeout: '60'
-        body: '{"secret_shares": {{ vault_servers | length * 3 }},"secret_threshold": 2}'
+        body: '{"secret_shares": 5,"secret_threshold": 2}'
         body_format: 'json'
         status_code: '200'
         headers:
