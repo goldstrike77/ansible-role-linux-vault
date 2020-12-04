@@ -19,26 +19,3 @@
   retries: 10
   delay: 2
   no_log: true
-
-#- name: Unsealing the Vault members.
-#  uri:
-#    url: '{% if vault_tls | bool %}https{% else %}http{% endif %}://{{ item.0 }}:{{ vault_port_arg.api }}/v1/sys/unseal'
-#    method: 'PUT'
-#    timeout: '30'
-#    body: '{"key":"{{ vault_init_key[item.1|int] }}"}'
-#    body_format: 'json'
-#    status_code: '200'
-#    headers:
-#      X-Requested-By: '{{ item.0 }}'
-#      cache-control: 'no-cache'
-#    validate_certs: 'no'
-#  environment:
-#    no_proxy: '{{ item.0 }}'
-#  loop: "{{ vault_servers | zip ( range( play_hosts.index(inventory_hostname) * 3, play_hosts.index(inventory_hostname) * 3 + 2 + 1, 1 ) | list ) | list }}"
-#  loop_control:
-#    pause: 2
-#  register: vault_unseal_status
-#  until: vault_unseal_status.status == 200
-#  retries: 10
-#  delay: 2
-#  no_log: true
