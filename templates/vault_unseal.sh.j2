@@ -1,6 +1,6 @@
 #!/bin/sh
 
-VAULT=/usr/local/bin/vault
+VAULT=/usr/bin/vault
 export VAULT_SKIP_VERIFY=true
 export VAULT_ADDR={% if vault_tls | bool %}https{% else %}http{% endif %}://{{ ansible_default_ipv4.address }}:{{ vault_port_arg.api }}
 {% for key in vault_init_key %}

@@ -1,18 +1,7 @@
 ---
-vault_soft_url: 'http://releases.hashicorp.com'
-
 vault_pypi_url: 'pypi.tuna.tsinghua.edu.cn'
 
-vault_cert_path: '/etc/vault/ssl'
-
-vault_architecture:
-  amd64: 'amd64'
-  x86_64: 'amd64'
-  armv6l: 'arm'
-  armv7l: 'arm'
-  aarch64: 'arm64'
-  32-bit: '386'
-  64-bit: 'amd64'
+vault_cert_path: '/etc/vault.d/ssl'
 
 vault_python_dependent_packages:
   - 'pip'

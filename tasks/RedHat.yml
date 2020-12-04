@@ -39,3 +39,23 @@
   until: yum_status is succeeded
   retries: 5
   delay: 2
+
+- name: Add Hashicorp YUM repositories.
+  yum_repository:
+    name: '{{ vault_repo_name }}'
+    description: '{{ vault_repo_name }} YUM repository'
+    file: '{{ vault_repo_name }}'
+    baseurl: '{{ vault_repo_url }}'
+    gpgcheck: 'no'
+    timeout: '60'
+
+- name: Install the Vault.
+  yum:
+    name: '{{ vault_packages }}'
+    state: 'present'
+    validate_certs: 'no'
+    disable_gpg_check: 'yes'
+  register: vault_upgrade
+  until: vault_upgrade is succeeded
+  retries: 5
+  delay: 2

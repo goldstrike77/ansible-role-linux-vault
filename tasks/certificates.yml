@@ -20,13 +20,13 @@
       file:
         dest: '{{ vault_cert_path }}'
         state: 'directory'
-        owner: '{{ vault_arg.user }}'
+        owner: 'vault'
         mode: '1750'
     - name: Selfsigned CA file transfer.
       copy:
         src: 'ssl/{{ item }}'
         dest: '{{ vault_cert_path }}/{{ item }}'
-        owner: '{{ vault_arg.user }}'
+        owner: 'vault'
         mode: '640'
       loop:
         - 'ca-cert.pem'
@@ -70,7 +70,7 @@
     - name: Assemble the server and CA certificate.
       shell: 'cat {{ vault_cert_path }}/server.crt {{ vault_cert_path }}/ca-cert.pem >> {{ vault_cert_path }}/certificate.pem'
       become: 'yes'
-      become_user: '{{ vault_arg.user }}'
+      become_user: 'vault'
     - name: Generate an OpenSSL Client private key.
       openssl_privatekey:
         path: '{{ vault_cert_path }}/client.key'

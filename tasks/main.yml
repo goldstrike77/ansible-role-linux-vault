@@ -5,9 +5,6 @@
 - name: Include firewall tasks.
   include: 'firewall.yml'
 
-- name: Installation the Vault.
-  include: 'install.yml'
-
 - name: Include certificate tasks.
   include: 'certificates.yml'
   when: vault_tls | bool

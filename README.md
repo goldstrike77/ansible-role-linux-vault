@@ -39,7 +39,7 @@ This Ansible role installs vault on the Linux operating system, including establ
 
 The following list of supported releases:
 
-* Vault 1.5
+* Vault 1.5+
 
 ## Role variables
 ### Main parameters #
@@ -109,7 +109,7 @@ Including an example of how to use your role (for instance, with variables passe
 You can also use the group_vars or the host_vars files for setting the variables needed for this role. File you should change: group_vars/all or host_vars/`group_name`.
 
 ```yaml
-vault_version: '1.5.0'
+vault_version: '1.5.5'
 vault_path: '/data'
 vault_tls: true
 vault_port_arg:

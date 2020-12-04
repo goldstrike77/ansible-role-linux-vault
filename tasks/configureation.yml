@@ -1,24 +1,17 @@
 ---
+- name: Creating Vault raft storage folder.
+  file:
+    dest: '{{ vault_path }}/vault'
+    state: 'directory'
+    owner: 'vault'
+    group: 'vault'
+    mode: '0750'
+
 - name: Vault configuration file transfer.
   template:
     src: 'vault.hcl.j2'
-    dest: '/etc/vault/vault.hcl'
-    owner: '{{ vault_arg.user }}'
-    group: '{{ vault_arg.user }}'
+    dest: '/etc/vault.d/vault.hcl'
+    owner: 'vault'
+    group: 'vault'
     mode: '0640'
   register: vault_config_update
-
-- name: Check if Vault systemd service file exists.
-  stat:
-    path: '/lib/systemd/system/vault.service'
-  register: vault_systemd_result
-
-- name: Vault systemd service file transfer.
-  template:
-    src: 'vault.service.j2'
-    dest: '/lib/systemd/system/vault.service'
-    owner: 'root'
-    group: 'root'
-    mode: '0644'
-  register: vault_systemd_update
-  when: not vault_systemd_result.stat.exists
