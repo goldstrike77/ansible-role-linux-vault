@@ -69,8 +69,6 @@ There are some variables in defaults/main.yml which can (Or needs to) be overrid
 * `vault_arg.log_format`: Specifies the log format to use.
 * `vault_arg.max_request_duration`: Specifies the maximum request duration allowed before Vault cancels the request.
 * `vault_arg.http_read_header_timeout`: Specifies the amount of time allowed to read request headers.
-* `vault_arg.user`: Sets the Unix username that the processes are executed as.
-* `vault_arg.uid`: Sets the Unix userID that the processes are executed as.
 
 ##### Service Mesh
 * `environments`: Define the service environment.
@@ -132,8 +130,6 @@ vault_arg:
   log_format: 'standard'
   max_request_duration: '60s'
   http_read_header_timeout: '30s'
-  user: 'vault'
-  uid: '2012'
 environments: 'Development'
 datacenter: 'dc01'
 domain: 'local'
