@@ -1,11 +1,14 @@
 ---
-- name: Creating Vault raft storage folder.
+- name: Creating Vault folder.
   file:
-    dest: '{{ vault_path }}/vault'
+    dest: '{{ item }}'
     state: 'directory'
     owner: 'vault'
     group: 'vault'
     mode: '0750'
+  loop:
+    - '{{ vault_path }}/vault'
+    - '/home/vault'
 
 - name: Vault configuration file transfer.
   template:

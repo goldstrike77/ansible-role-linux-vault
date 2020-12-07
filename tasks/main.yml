@@ -34,6 +34,12 @@
     - vault_root_token is defined
     - vault_servers[0] in ansible_default_ipv4.address
 
+- name: Include auth method enable tasks.
+  include: 'auth.yml'
+  when:
+    - vault_root_token is defined
+    - vault_servers[0] in ansible_default_ipv4.address
+
 - name: Include backup tasks.
   include: 'backup.yml'
   when: vault_root_token is defined

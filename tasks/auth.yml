@@ -1,0 +1,22 @@
+---
+- name: Enable the Vault auth method.
+  uri:
+    url: '{% if vault_tls | bool %}https{% else %}http{% endif %}://{{ ansible_default_ipv4.address }}:{{ vault_port_arg.api }}/v1/sys/auth/{{ item }}'
+    method: 'POST'
+    timeout: '60'
+    body: '{"type": "{{ item }}"}'
+    body_format: 'json'
+    status_code: '204'
+    headers:
+      X-Vault-Token: '{{ vault_init_status | json_query("json.root_token") }}'
+      X-Requested-By: '{{ ansible_default_ipv4.address }}'
+      cache-control: 'no-cache'
+    validate_certs: 'no'
+  environment:
+    no_proxy: '{{ ansible_default_ipv4.address }}'
+  loop: "{{ vault_auth_methods }}"
+  register: vault_auth_status
+  until: vault_auth_status.status == 204
+  retries: 5
+  delay: 2
+  no_log: true

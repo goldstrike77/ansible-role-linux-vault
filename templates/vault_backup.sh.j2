@@ -5,14 +5,15 @@ RCLONE=/bin/rclone
 RM=/bin/rm
 FIND=/bin/find
 DATE=`/bin/date '+%Y%m%d%H%M%S'`
+TMPFILE="/tmp/vault-backup-runner.$$.tmp"
 export VAULT_ADDR={% if vault_tls | bool %}https{% else %}http{% endif %}://{{ ansible_default_ipv4.address }}:{{ vault_port_arg.api }}
 export VAULT_TOKEN={{ vault_root_token }}
 export VAULT_SKIP_VERIFY=true
-$VAULT operator raft snapshot save {{ vault_path }}/backup/vault/$DATE.snap >/dev/null 2>&1
+$VAULT operator raft snapshot save {{ vault_path }}/backup/vault/$DATE.snap >/dev/null 2>&1 >> $TMPFILE 2>&1
 $FIND {{ vault_path }}/backup/vault -type f -mtime +{{ vault_backupset_arg.keep }} -exec $RM -fr {} \;
 {% if vault_backupset_arg.cloud_rsync | bool and vault_backupset_arg.cloud_drive is defined %}
 # Rsync for cloud storage
-$RCLONE --verbose --config="/etc/rclone/vault.conf" mkdir vault:{{ ansible_hostname | lower }}
-$RCLONE --bwlimit="{{ vault_backupset_arg.cloud_bwlimit | default('10M') }}" --verbose --config="/etc/rclone/vault.conf" {{ vault_backupset_arg.cloud_event | default('sync') }} {{ vault_path }}/backup/vault vault:{{ ansible_hostname | lower }}/vault
+$RCLONE --verbose --config="/etc/rclone/vault.conf" mkdir vault:{{ ansible_hostname | lower }} >> $TMPFILE 2>&1
+$RCLONE --bwlimit="{{ vault_backupset_arg.cloud_bwlimit | default('10M') }}" --verbose --config="/etc/rclone/vault.conf" {{ vault_backupset_arg.cloud_event | default('sync') }} {{ vault_path }}/backup/vault vault:{{ ansible_hostname | lower }}/vault >> $TMPFILE 2>&1
 {% endif %}
 exit 0

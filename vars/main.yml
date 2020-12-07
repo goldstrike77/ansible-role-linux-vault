@@ -7,6 +7,9 @@ vault_python_dependent_packages:
   - 'pip'
   - 'cryptography'
 
+vault_auth_methods: 
+  - 'approle'
+
 vault_servers: "\
   {% set _vault_servers = [] %}\
   {% for host in groups[group_names[-1]] %}\
