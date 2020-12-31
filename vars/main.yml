@@ -12,7 +12,7 @@ vault_auth_methods:
 
 vault_servers: "\
   {% set _vault_servers = [] %}\
-  {% for host in groups[group_names[-1]] %}\
+  {% for host in groups[group_names[0]] %}\
     {% if _vault_servers.append(hostvars[host]['ansible_host']) %}{% endif %}\
   {% endfor %}\
   {{ _vault_servers }}"
