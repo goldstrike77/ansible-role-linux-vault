@@ -1,9 +1,10 @@
 ---
 vault_epel_repo_name: 'epel'
-vault_epel_repo_url: 'http://mirrors.tuna.tsinghua.edu.cn/epel/{{ ansible_distribution_major_version }}/$basearch/'
+vault_epel_repo_url: 'http://mirrors.tuna.tsinghua.edu.cn/epel/$releasever/$basearch/'
 
 vault_repo_name: 'hashicorp'
-vault_repo_url: 'https://rpm.releases.hashicorp.com/RHEL/$releasever/$basearch/stable/'
+#vault_repo_url: 'https://rpm.releases.hashicorp.com/RHEL/$releasever/$basearch/stable/'
+vault_repo_url: 'http://cache.omygods.com/RHEL/$releasever/'
 
 vault_dependent_packages:
   - 'python-pip'
