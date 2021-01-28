@@ -4,7 +4,7 @@ vault_pypi_url: 'pypi.tuna.tsinghua.edu.cn'
 vault_cert_path: '/etc/vault.d/ssl'
 
 vault_python_dependent_packages:
-  - 'pip'
+  - 'pip==20.3.4'
   - 'cryptography'
 
 vault_auth_methods: 
