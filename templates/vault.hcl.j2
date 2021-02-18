@@ -33,7 +33,7 @@ telemetry {
 
 storage "{{ vault_storage_arg.stanza }}" {
   path    = "{{ vault_path }}/vault"
-  node_id = "{{ inventory_hostname | upper }}"
+  node_id = "{{ ansible_hostname | lower }}"
 {% if vault_servers | length > 1 and vault_storage_arg.stanza == 'raft' %}
 {% for hosts in vault_servers %}
   retry_join {
