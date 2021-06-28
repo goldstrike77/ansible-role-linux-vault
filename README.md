@@ -23,7 +23,6 @@ __Table of Contents__
   * [Combination of group vars and playbook](#combination-of-group-vars-and-playbook)
 - [License](#license)
 - [Author Information](#author-information)
-- [Contributors](#Contributors)
 - [Donations](#Donations)
 
 ## Overview
@@ -109,7 +108,7 @@ Including an example of how to use your role (for instance, with variables passe
 You can also use the group_vars or the host_vars files for setting the variables needed for this role. File you should change: group_vars/all or host_vars/`group_name`.
 
 ```yaml
-vault_version: '1.6.1'
+vault_version: '1.7.3'
 vault_path: '/data'
 vault_tls: true
 vault_port_arg:
@@ -156,9 +155,6 @@ consul_public_clients:
 
 ## Author Information
 Please send your suggestions to make this role better.
-
-## Contributors
-Special thanks to the [Connext Information Technology](http://www.connext.com.cn) for their contributions to this role.
 
 ## Donations
 Please donate to the following monero address.

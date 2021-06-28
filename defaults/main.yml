@@ -1,7 +1,7 @@
 ---
 # General parameters #
 vault_is_install: false # A boolean value, whether install the HashiCorp Vault.
-vault_version: '1.6.3' # Specify the Vault version.
+vault_version: '1.7.3' # Specify the Vault version.
 vault_path: '/data' # Specify the Consul data folder.
 vault_tls: true # A boolean value, whether Encrypting client and cluster communications.
 
